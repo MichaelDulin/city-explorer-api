@@ -6,6 +6,7 @@ let data = require("./data/weather.json");
 const cors = require("cors");
 const app = express();
 app.use(cors());
+
 const PORT = process.env.PORT || 3002;
 
 
@@ -17,8 +18,9 @@ app.get("/", (req, res) => {
 
 app.get('/weather', (request, response) => {
     let citySearched = request.query.search;
-    let getCity = data.find(search => search.city_name===citySearched)
-    let cityWeatherData = new Forecast(getCity);
+    let getCityObj = data.find(search => search.city_name===citySearched)
+    let cityWeatherData = getCityObj.data.map(item => new Forecast(item));
+    response.send(cityWeatherData);
 
 });
 
