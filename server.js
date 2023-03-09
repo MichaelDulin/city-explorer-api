@@ -14,6 +14,10 @@ app.get("/", (req, res) => {
   res.send("Hello from my server!");
 });
 
+// MOVIE API URL: https://api.themoviedb.org/3/movie/550?api_key=e705c3663e6bd4140c40367e84dbe954
+
+
+
 app.get("/weather", async (request, response, next) => {
   try {
     let lat = request.query.lat;
