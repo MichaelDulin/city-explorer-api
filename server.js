@@ -48,7 +48,7 @@ app.use((error, request, response, next) => {
 class Forecast {
   constructor(City) {
     this.date = City.valid_date;
-    this.description = `Low of ${DayObject.low_temp}, high of ${DayObject.max_temp} with ${DayObject.weather.description}`
+    this.description = `Low of ${City.low_temp}, high of ${City.max_temp} with ${City.weather.description}`
   }
 }
 
