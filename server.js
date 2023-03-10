@@ -24,8 +24,8 @@ app.get("/weather", async (request, response, next) => {
     let long = request.query.lon;
     let weatherKey = process.env.WEATHER_API_KEY;
 
-    let weatherUrl = `https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${long}&key=${weatherKey}`;
-    // let url = `https://api.weatherbit.io/v2.0/forecast/daily?key=${process.env.WEATHER_API_KEY}&units=I&days=3&lat=${lat}&lon=${long}`;
+    //let weatherUrl = `https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${long}&key=${weatherKey}`;    <-- does not work
+     let weatherUrl = `https://api.weatherbit.io/v2.0/forecast/daily?key=${weatherKey}&units=I&days=3&lat=${lat}&lon=${long}`;
 
     let weatherData = await axios.get(weatherUrl);
     let forecastArr = weatherData.data.data.map(dailyForecast => new Forecast(dailyForecast));
