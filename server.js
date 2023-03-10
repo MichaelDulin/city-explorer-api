@@ -22,8 +22,9 @@ app.get("/", (req, res) => {
 app.get("/weather", async (request, response, next) => {
     let lat = request.query.lat;
     let long = request.query.lon;
+    let weatherKey = process.env.WEATHER_API_KEY;
 
-    let weatherUrl = `https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${long}&key=${process.env.WEATHER_API_KEY}`;
+    let weatherUrl = `https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${long}&key=${weatherKey}`;
     // let url = `https://api.weatherbit.io/v2.0/forecast/daily?key=${process.env.WEATHER_API_KEY}&units=I&days=3&lat=${lat}&lon=${long}`;
 
     let weatherData = await axios.get(weatherUrl);
@@ -34,7 +35,8 @@ app.get("/weather", async (request, response, next) => {
 
 app.get('/movie', async (request, response, next) => {
   let searchBy = request.query.city;
-  let movieUrl = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&language=en-US&page=1&include_adult=false&query=${searchBy}`;
+  let movieKey = process.env.MOVIE_API_KEY;
+  let movieUrl = `https://api.themoviedb.org/3/search/movie?api_key=${movieKey}&language=en-US&page=1&include_adult=false&query=${searchBy}`;
   
   let movieData = await axios.get(movieUrl);
   let movieArr = movieData.data.results.map(movie => new Movie(movie));
