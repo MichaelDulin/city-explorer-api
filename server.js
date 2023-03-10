@@ -5,6 +5,7 @@ require("dotenv").config();
 //const data = require("./data/weather.json");
 const cors = require("cors");
 const { response } = require("express");
+const { default: axios } = require("axios");
 const app = express();
 app.use(cors());
 
@@ -19,19 +20,26 @@ app.get("/", (req, res) => {
 
 
 app.get("/weather", async (request, response, next) => {
-  try {
     let lat = request.query.lat;
     let long = request.query.lon;
-    let url = `https://api.weatherbit.io/v2.0/forecast/daily?key=${process.env.WEATHER_API_KEY}&units=I&days=3&lat=${lat}&lon=${long}`;
 
-    let weatherData = await axios.get(url);
-    let forecastArr = weatherData.data.data.map(dailyForecast => {
-      return new Forecast(dailyForecast);
-    })
+    let weatherUrl = `https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${long}&key=${process.env.WEATHER_API_KEY}`;
+    // let url = `https://api.weatherbit.io/v2.0/forecast/daily?key=${process.env.WEATHER_API_KEY}&units=I&days=3&lat=${lat}&lon=${long}`;
+
+    let weatherData = await axios.get(weatherUrl);
+    let forecastArr = weatherData.data.data.map(dailyForecast => new Forecast(dailyForecast));
     response.send(forecastArr);
-  } catch (error) {
-    next(error);
-  }
+});
+
+
+app.get('/movie', async (request, response, next) => {
+  let searchBy = request.query.city;
+  let movieUrl = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&language=en-US&page=1&include_adult=false&query=${searchBy}`;
+  
+  let movieData = await axios.get(movieUrl);
+  let movieArr = movieData.data.results.map(movie => new Movie(movie));
+  response.send(movieArr);
+ 
 });
 
 app.get("*", (req, res) => {
@@ -46,9 +54,16 @@ app.use((error, request, response, next) => {
 
 
 class Forecast {
-  constructor(City) {
-    this.date = City.valid_date;
-    this.description = `Low of ${City.low_temp}, high of ${City.max_temp} with ${City.weather.description}`
+  constructor(forecast) {
+    this.date = forecast.valid_date;
+    this.description = `Low of ${forecast.low_temp}, high of ${forecast.max_temp} with ${forecast.weather.description}`
+  }
+}
+class Movie {
+  constructor(movies) {
+    this.title = movies.original_title;
+    this.releasedDate = movies.release_date;
+    this.img_url = `https://image.tmdb.org/t/p/w200${movies.poster_path}`;
   }
 }
 
