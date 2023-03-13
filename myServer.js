@@ -4,7 +4,7 @@ const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
 const getWeather = require('./modules/getWeather');
-const getMovies = require('./modules/movie');
+const getMovies = require('./modules/movies');
 const app = express();
 app.use(cors());
 const PORT = process.env.PORT || 3002;
@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3002;
 
 app.get('/weather', getWeather);
 
-app.get('/movie', getMovies);
+app.get('/movies', getMovies);
 
 app.get('/', (request, response) => {
   response.send('Hello from the server');
