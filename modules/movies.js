@@ -13,7 +13,7 @@ class Movie {
 
 async function getMovies(request, response, next){
     try{
-      let cityName = request.query.search;
+      let cityName = request.query.city;
       let key = cityName + 'Data';
       let timeToCache = 1000*60*60*24*30;
   
